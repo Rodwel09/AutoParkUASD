@@ -53,5 +53,42 @@ module.exports = (db) => {
     }
   })
 
+  // Delete notificacion by ID
+  router.delete('/:id', async (req, res) => {
+    try {
+      const deleted = await db('notificaciones').where('id', req.params.id).del()
+      if (!deleted) {
+        return res.status(404).json({ success: false, error: 'Notificacion not found' })
+      }
+      res.json({ success: true, message: 'Notificacion deleted successfully' })
+    } catch (err) {
+      res.status(500).json({ success: false, error: err.message })
+    }
+  })
+
+  // PUT update existing notificacion
+  router.put('/:id', async (req, res) => {
+    try {
+      const { usuario_id, mensaje, tipo } = req.body
+
+      const updated = await db('notificaciones')
+        .where('id', req.params.id)
+        .update({
+          usuario_id,
+          mensaje,
+          tipo
+        })
+
+      if (!updated) {
+        return res.status(404).json({ success: false, error: 'Notificacion not found' })
+      }
+
+      res.json({ success: true, message: 'Notificacion updated successfully' })
+    } catch (err) {
+      res.status(500).json({ success: false, error: err.message })
+    }
+  })
+
+
   return router
 }

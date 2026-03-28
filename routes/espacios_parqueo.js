@@ -55,5 +55,44 @@ module.exports = (db) => {
     }
   })
 
+
+  router.delete('/:id', async (req, res) => {
+    try {
+      const deleted = await db('espacios_parqueo').where('id', req.params.id).del()
+      if (!deleted) {
+        return res.status(404).json({ success: false, error: 'Espacio not found' })
+      }
+      res.json({ success: true, message: 'Espacio deleted successfully' })
+    } catch (err) {
+      res.status(500).json({ success: false, error: err.message })
+    }
+  })
+
+  // PUT update existing espacio_parqueo
+  router.put('/:id', async (req, res) => {
+    try {
+      const { name, address, espacio_total, tiempo_abierto, tiempo_cerrado } = req.body
+
+      const updated = await db('espacios_parqueo')
+        .where('id', req.params.id)
+        .update({
+          name,
+          address,
+          espacio_total,
+          tiempo_abierto,
+          tiempo_cerrado
+        })
+
+      if (!updated) {
+        return res.status(404).json({ success: false, error: 'Espacio not found' })
+      }
+
+      res.json({ success: true, message: 'Espacio updated successfully' })
+    } catch (err) {
+      res.status(500).json({ success: false, error: err.message })
+    }
+  })
+
+
   return router
 }

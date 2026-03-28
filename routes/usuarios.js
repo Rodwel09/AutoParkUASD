@@ -56,5 +56,47 @@ module.exports = (db) => {
     }
   })
 
+  // PUT update existing usuario
+  router.put('/:id', async (req, res) => {
+    try {
+      const { nombre, email, telefono, contrasena, role, estado } = req.body
+
+      const updatedUsuario = await db('usuarios')
+        .where('id', req.params.id)
+        .update({
+          nombre,
+          email,
+          telefono,
+          contrasena,
+          role,
+          estado
+        })
+
+      if (!updatedUsuario) {
+        return res.status(404).json({ success: false, error: 'Usuario not found' })
+      }
+
+      res.json({ success: true, message: 'Usuario updated successfully' })
+    } catch (err) {
+      res.status(500).json({ success: false, error: err.message })
+    }
+  })
+
+
+  // Delete usuario
+  router.delete('/:id', async (req, res) => {
+    try {
+      const deleted = await db('usuarios').where('id', req.params.id).del()
+
+      if (!deleted) {
+        return res.status(404).json({ success: false, error: 'Usuario not found' })
+      }
+
+      res.json({ success: true, message: 'Usuario deleted successfully' })
+    } catch (err) {
+      res.status(500).json({ success: false, error: err.message })
+    }
+  })
+
   return router
 }

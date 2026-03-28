@@ -55,5 +55,44 @@ module.exports = (db) => {
     }
   })
 
+  // PUT update existing ticket
+  router.put('/:id', async (req, res) => {
+    try {
+      const { vehiculo_id, fecha_hora_entrada, fecha_hora_salida, total_pagar, status_de_pago } = req.body;
+
+      const updatedTicket = await db('tickets')
+        .where('id', req.params.id)
+        .update({
+          vehiculo_id,
+          fecha_hora_entrada,
+          fecha_hora_salida,
+          total_pagar,
+          status_de_pago
+        })
+
+      if (!updatedTicket) {
+        return res.status(404).json({ success: false, error: 'Ticket not found' })
+      }
+
+      res.json({ success: true, message: 'Ticket updated successfully' })
+    } catch (err) {
+      res.status(500).json({ success: false, error: err.message })
+    }
+  })
+
+  // Delete a ticket
+  router.delete('/:id', async (req, res) => {
+    try {
+      const deleted = await db('tickets').where('id', req.params.id).del()
+      if (!deleted) {
+        return res.status(404).json({ success: false, error: 'Ticket not found' })
+      }
+
+      res.json({ success: true, message: 'Ticket deleted successfully' })
+    } catch (err) {
+      res.status(500).json({ success: false, error: err.message })
+    }
+  })
+
   return router
 }

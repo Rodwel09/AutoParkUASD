@@ -52,5 +52,47 @@ module.exports = (db) => {
     }
   })
 
+  // PUT update existing espacio_disponible
+  router.put('/:id', async (req, res) => {
+    try {
+      const { espacio_id, disponible } = req.body
+      if (!espacio_id || disponible === undefined) {
+        return res.status(400).json({
+          success: false,
+          error: 'Missing required fields: espacio_id, disponible'
+        })
+      }
+
+      const updated = await db('espacios_disponibles')
+        .where('id', req.params.id)
+        .update({
+          espacio_id,
+          disponible
+        })
+
+      if (!updated) {
+        return res.status(404).json({ success: false, error: 'Espacio disponible not found' })
+      }
+
+      res.json({ success: true, message: 'Espacio disponible updated successfully' })
+    } catch (err) {
+      res.status(500).json({ success: false, error: err.message })
+    }
+  })
+
+  // DELETE delete existing espacio_disponible
+  router.delete('/:id', async (req, res) => {
+    try {
+      const deleted = await db('espacios_disponibles').where('id', req.params.id).del()
+      if (!deleted) {
+        return res.status(404).json({ success: false, error: 'Espacio disponible not found' })
+      }
+      res.json({ success: true, message: 'Espacio disponible deleted successfully' })
+    } catch (err) {
+      res.status(500).json({ success: false, error: err.message })
+    }
+  })
+
+
   return router
 }

@@ -53,5 +53,48 @@ module.exports = (db) => {
     }
   })
 
+  // Delete audit_log by ID
+  router.delete('/:id', async (req, res) => {
+    try {
+      const deleted = await db('audit_logs').where('id', req.params.id).del();
+      if (!deleted) {
+        return res.status(404).json({ success: false, error: 'Audit log not found' })
+      }
+      res.json({ success: true, message: 'Audit log deleted successfully' })
+    } catch (err) {
+      res.status(500).json({ success: false, error: err.message })
+    }
+  })
+
+  // Update audit_log by ID
+  router.put('/:id', async (req, res) => {
+    try {
+      const { usuario_id, accion, detalle } = req.body
+
+      if (!usuario_id || !accion || !detalle) {
+        return res.status(400).json({
+          success: false,
+          error: 'Missing required fields: usuario_id, accion, detalle'
+        })
+      }
+
+      const updated = await db('audit_logs')
+        .where('id', req.params.id)
+        .update({
+          usuario_id,
+          accion,
+          detalle
+        })
+
+      if (!updated) {
+        return res.status(404).json({ success: false, error: 'Audit log not found' })
+      }
+
+      res.json({ success: true, message: 'Audit log updated successfully' })
+    } catch (err) {
+      res.status(500).json({ success: false, error: err.message })
+    }
+  })
+
   return router
 }
