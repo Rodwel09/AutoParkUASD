@@ -54,5 +54,42 @@ module.exports = (db) => {
     }
   })
 
+  // Delete reservacion by ID
+  router.delete('/:id', async (req, res) => {
+    try {
+      const deleted = await db('reservaciones').where('id', req.params.id).del()
+      if (!deleted) {
+        return res.status(404).json({ success: false, error: 'Reservacion not found' })
+      }
+      res.json({ success: true, message: 'Reservacion deleted successfully' })
+    } catch (err) {
+      res.status(500).json({ success: false, error: err.message })
+    }
+  })
+
+  // PUT update existing reservacion
+  router.put('/:id', async (req, res) => {
+    try {
+      const { usuario_id, espacio_id, fecha_de_entrada, fecha_de_salida } = req.body
+
+      const updated = await db('reservaciones')
+        .where('id', req.params.id)
+        .update({
+          usuario_id,
+          espacio_id,
+          fecha_de_entrada,
+          fecha_de_salida
+        })
+
+      if (!updated) {
+        return res.status(404).json({ success: false, error: 'Reservacion not found' })
+      }
+
+      res.json({ success: true, message: 'Reservacion updated successfully' })
+    } catch (err) {
+      res.status(500).json({ success: false, error: err.message })
+    }
+  })
+
   return router
 }

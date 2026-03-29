@@ -53,5 +53,46 @@ module.exports = (db) => {
     }
   })
 
+  // PUT update existing seccion_parqueo
+  router.put('/:id', async (req, res) => {
+    try {
+      const { vehiculo_id, espacio_id, estado } = req.body
+
+      const updated = await db('secciones_parqueo')
+        .where('id', req.params.id)
+        .update({
+          vehiculo_id,
+          espacio_id,
+          estado
+        })
+
+      if (!updated) {
+        return res.status(404).json({ success: false, error: 'Seccion parqueo not found' })
+      }
+
+      res.json({ success: true, message: 'Seccion parqueo updated successfully' })
+    } catch (err) {
+      res.status(500).json({ success: false, error: err.message })
+    }
+  })
+
+
+  // Delete a seccion_parqueo
+  router.delete('/:id', async (req, res) => {
+    try {
+      const deleted = await db('secciones_parqueo')
+        .where('id', req.params.id)
+        .del()
+
+      if (!deleted) {
+        return res.status(404).json({ success: false, error: 'Seccion parqueo not found' })
+      }
+
+      res.json({ success: true, message: 'Seccion parqueo deleted successfully' })
+    } catch (err) {
+      res.status(500).json({ success: false, error: err.message })
+    }
+  })
+
   return router
 }

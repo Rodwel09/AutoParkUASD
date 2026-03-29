@@ -54,5 +54,42 @@ module.exports = (db) => {
     }
   })
 
-  return router
+  // Delete pago by ID
+  router.delete('/:id', async (req, res) => {
+    try {
+      const deleted = await db('pagos').where('id', req.params.id).del()
+      if (!deleted) {
+        return res.status(404).json({ success: false, error: 'Pago not found' })
+      }
+      res.json({ success: true, message: 'Pago deleted successfully' })
+    } catch (err) {
+      res.status(500).json({ success: false, error: err.message })
+    } });
+
+
+  // PUT update existing pago
+  router.put('/:id', async (req, res) => {
+    try {
+      const { usuario_id, ticket_id, monto, fecha_de_pago } = req.body;
+
+      const updated = await db('pagos')
+        .where('id', req.params.id)
+        .update({
+          usuario_id,
+          ticket_id,
+          monto,
+          fecha_de_pago
+        });
+
+      if (!updated) {
+        return res.status(404).json({ success: false, error: 'Pago not found' });
+      }
+
+      res.json({ success: true, message: 'Pago updated successfully' });
+    } catch (err) {
+      res.status(500).json({ success: false, error: err.message });
+    }
+  });
+
+  return router;
 }

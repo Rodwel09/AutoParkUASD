@@ -56,5 +56,45 @@ module.exports = (db) => {
     }
   })
 
+
+  // Delete vehiculo by ID
+  router.delete('/:id', async (req, res) => {
+    try {
+      const deleted = await db('vehiculos').where('id', req.params.id).del()
+      if (!deleted) {
+        return res.status(404).json({ success: false, error: 'Vehiculo not found' })
+      }
+      res.json({ success: true, message: 'Vehiculo deleted successfully' })
+    } catch (err) {
+      res.status(500).json({ success: false, error: err.message })
+    }
+  })
+
+  // PUT update existing vehiculo
+  router.put('/:id', async (req, res) => {
+    try {
+      const { usuario_id, placa, marca, modelo, color, tipo } = req.body
+
+      const updated = await db('vehiculos')
+        .where('id', req.params.id)
+        .update({
+          usuario_id,
+          placa,
+          marca,
+          modelo,
+          color,
+          tipo
+        })
+
+      if (!updated) {
+        return res.status(404).json({ success: false, error: 'Vehiculo not found' })
+      }
+
+      res.json({ success: true, message: 'Vehiculo updated successfully' })
+    } catch (err) {
+      res.status(500).json({ success: false, error: err.message })
+    }
+  })
+
   return router
 }

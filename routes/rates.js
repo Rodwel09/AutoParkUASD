@@ -52,5 +52,40 @@ module.exports = (db) => {
     }
   })
 
+  // Delete rate by ID
+  router.delete('/:id', async (req, res) => {
+    try {
+      const deleted = await db('rates').where('id', req.params.id).del()
+      if (!deleted) {
+        return res.status(404).json({ success: false, error: 'Rate not found' })
+      }
+      res.json({ success: true, message: 'Rate deleted successfully' })
+    } catch (err) {
+      res.status(500).json({ success: false, error: err.message })
+    }
+  })
+
+  // PUT update existing rate
+  router.put('/:id', async (req, res) => {
+    try {
+      const { nombre, descripcion } = req.body
+
+      const updated = await db('rates')
+        .where('id', req.params.id)
+        .update({
+          nombre,
+          descripcion
+        })
+
+      if (!updated) {
+        return res.status(404).json({ success: false, error: 'Rate not found' })
+      }
+
+      res.json({ success: true, message: 'Rate updated successfully' })
+    } catch (err) {
+      res.status(500).json({ success: false, error: err.message })
+    }
+  })
+
   return router
 }
