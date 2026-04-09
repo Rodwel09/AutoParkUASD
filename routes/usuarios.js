@@ -12,6 +12,40 @@ module.exports = (db) => {
     }
   })
 
+  // POST login usuario
+  router.post('/login', async (req, res) => {
+    try {
+      const { nombre, contrasena } = req.body
+
+      if (!nombre || !contrasena) {
+        return res.status(400).json({
+          success: false,
+          error: 'Missing required fields: nombre, contrasena'
+        })
+      }
+
+      const usuario = await db('usuarios')
+        .where({ nombre, contrasena })
+        .first()
+
+      if (!usuario) {
+        return res.status(401).json({ success: false, error: 'Usuario o contraseña incorrectos' })
+      }
+
+      res.json({
+        success: true,
+        data: {
+          id: usuario.id,
+          nombre: usuario.nombre,
+          role: usuario.role,
+          estado: usuario.estado
+        }
+      })
+    } catch (err) {
+      res.status(500).json({ success: false, error: err.message })
+    }
+  })
+
   // GET single usuario by ID
   router.get('/:id', async (req, res) => {
     try {
