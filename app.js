@@ -1,4 +1,5 @@
 const express = require('express')
+const cors = require('cors')
 const knex = require('knex')
 const dbConfig = require('./database/db.config.js')
 
@@ -26,6 +27,7 @@ const db = knex({
 })
 
 app.use(express.json())
+app.use(cors())
 
 // Home endpoint
 app.get('/', (req, res) => {
