@@ -1,5 +1,6 @@
 const express = require('express')
 const cors = require('cors')
+const path = require('path')
 const knex = require('knex')
 const dbConfig = require('./database/db.config.js')
 
@@ -29,26 +30,38 @@ const db = knex({
 app.use(express.json())
 app.use(cors())
 
-// Home endpoint
+app.use('/html', express.static(path.join(__dirname, 'html')))
+app.use('/css', express.static(path.join(__dirname, 'css')))
+app.use('/js', express.static(path.join(__dirname, 'js')))
+app.use('/img', express.static(path.join(__dirname, 'img')))
+
+app.get('/login', (req, res) => {
+  res.sendFile(path.join(__dirname, 'html', 'login.html'))
+})
+
+app.get('/dashboard', (req, res) => {
+  res.sendFile(path.join(__dirname, 'html', 'index.html'))
+})
+
+app.get('/admin', (req, res) => {
+  res.sendFile(path.join(__dirname, 'html', 'admin.html'))
+})
+
+app.get('/entrada', (req, res) => {
+  res.sendFile(path.join(__dirname, 'html', 'entrada.html'))
+})
+
+app.get('/salida', (req, res) => {
+  res.sendFile(path.join(__dirname, 'html', 'salida.html'))
+})
+
+app.get('/reportes', (req, res) => {
+  res.sendFile(path.join(__dirname, 'html', 'reportes.html'))
+})
+
+// Home endpoint redirects to the login page
 app.get('/', (req, res) => {
-  res.json({
-    message: 'AUTOPARK UASD API',
-    status: 'running',
-    availableEndpoints: {
-      usuarios: '/api/usuarios',
-      espacios_parqueo: '/api/espacios_parqueo',
-      vehiculos: '/api/vehiculos',
-      tickets: '/api/tickets',
-      notificaciones: '/api/notificaciones',
-      cambios_puestos: '/api/cambios_puestos',
-      audit_logs: '/api/audit_logs',
-      espacios_disponibles: '/api/espacios_disponibles',
-      reservaciones: '/api/reservaciones',
-      secciones_parqueo: '/api/secciones_parqueo',
-      pagos: '/api/pagos',
-      rates: '/api/rates'
-    }
-  })
+  res.redirect('/login')
 })
 
 // Register routes
