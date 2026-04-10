@@ -57,7 +57,9 @@
                 localStorage.setItem("rol", data.data.role)
                 localStorage.setItem("usuario_id", data.data.id)
                 localStorage.setItem("nombre", data.data.nombre)
-                window.location.href = "index.html"
+
+                // Redirect to dashboard after successful login
+                window.location.href = '/dashboard';
 
             } catch (error) {
                 errorMsg.innerText = "No se pudo conectar con el servidor";
