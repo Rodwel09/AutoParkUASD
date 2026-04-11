@@ -358,3 +358,28 @@ canvas {
     margin-bottom: 10px;
     /* pequeño espacio controlado */
 }
+
+/*datos nuevos*/
+
+.main {
+    flex: 1; /* Ocupa todo el espacio restante a la derecha del menú */
+    padding: 25px;
+    background: #eef2f7;
+    min-width: 0; /* Evita que tablas largas rompan el diseño */
+}
+
+.layout {
+    display: flex;
+    min-height: 100vh; /* Asegura que el contenedor mida al menos el alto de la pantalla */
+}
+
+/* SIDEBAR */
+.sidebar {
+    width: 280px; /* Lo hice un poco más ancho para que se vea más largo/robusto */
+    min-height: 100vh; /* Se estira al alto total */
+    background: linear-gradient(180deg, #2c4a72, #1e3c72);
+    padding: 20px;
+    position: sticky; /* Se queda fijo mientras haces scroll en el contenido */
+    top: 0;
+    flex-shrink: 0; /* Evita que el menú se aplaste si el contenido es mucho */
+}
