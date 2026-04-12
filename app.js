@@ -59,20 +59,21 @@ app.get('/reportes', (req, res) => {
   res.sendFile(path.join(__dirname, 'html', 'reportes.html'))
 })
 
-//app.js datos nuevos 
-
 app.get('/vehiculo', (req, res) => {
   res.sendFile(path.join(__dirname, 'html', 'vehiculo.html'))
 })
+
 app.get('/tickets', (req, res) => {
-  res.sendFile(path.join(__dirname, 'html', 'tickets.html'))
+  res.sendFile(path.join(__dirname, 'html', 'ticket.html'))
 })
+
 app.get('/reservacion', (req, res) => {
   res.sendFile(path.join(__dirname, 'html', 'reservacion.html'))
 })
+
 app.get('/usuarios', (req, res) => {
   res.sendFile(path.join(__dirname, 'html', 'usuarios.html'))
-})//datos nuevos...
+})
 
 // Home endpoint redirects to the login page
 app.get('/', (req, res) => {

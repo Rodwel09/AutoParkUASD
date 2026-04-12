@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>AutoPark - Registrar Entrada</title>
     <link rel="stylesheet" href="../css/vehiculo.css" />
-      <link rel="stylesheet" href="../css/entrada.css" />
+    <link rel="stylesheet" href="../css/entrada.css" />
     <link rel="icon" type="image/png" href="../img/logo2.png" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
 </head>
@@ -19,10 +19,11 @@
                 <span>Sistema de parqueo</span>
             </div>
             <nav>
-                <a href="index.html"><i class="fas fa-home"></i> Inicio</a>
-                <a class="active" href="entrada.html"><i class="fas fa-car"onclick="admin()"></i> Registrar Entrada</a>
-                <a href="salida.html"><i class="fas fa-sign-out-alt"></i> Registrar Salida</a>
-                <a href="/html/reportes.html"><i class="fas fa-chart-bar"></i> Reportes</a>
+                <a href="/dashboard"><i class="fas fa-home"></i> Inicio</a>
+                <a class="active" href="/entrada"><i class="fas fa-car" onclick="admin()"></i> Registrar
+                    Entrada</a>
+                <a href="/salida"><i class="fas fa-sign-out-alt"></i> Registrar Salida</a>
+                <a href="/reportes"><i class="fas fa-chart-bar"></i> Reportes</a>
             </nav>
         </aside>
 
@@ -35,52 +36,52 @@
                 </div>
             </div>
 
-<div class="container">
-    <h2><span id="reloj"></span> - Registro de Movimientos</h2>
+            <div class="container">
+                <h2><span id="reloj"></span> - Registro de Movimientos</h2>
 
-    <!-- Formulario rápido de Entrada -->
-    <div class="registro-entrada">
-        <div class="form-group">
-            <label>ID Vehículo</label>
-            <input type="number" id="vehiculo_id" placeholder="Ej: 1" required>
-        </div>
-        <button class="btn-entrada" onclick="registrarEntrada()">REGISTRAR ENTRADA</button>
-    </div>
+                <!-- Formulario rápido de Entrada -->
+                <div class="registro-entrada">
+                    <div class="form-group">
+                        <label>ID Vehículo</label>
+                        <input type="number" id="vehiculo_id" placeholder="Ej: 1" required>
+                    </div>
+                    <button class="btn-entrada" onclick="registrarEntrada()">REGISTRAR ENTRADA</button>
+                </div>
 
-    <table>
-        <thead>
-            <tr>
-                <th>Ticket</th>
-                <th>Vehículo</th>
-                <th>Hora Entrada</th>
-                <th>Hora Salida</th>
-                <th>Total</th>
-                <th>Estado</th>
-                <th>Acción</th>
-            </tr>
-        </thead>
-        <tbody id="listaMovimientos">
-            <!-- Cargado por JS -->
-        </tbody>
-    </table>
-</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Ticket</th>
+                            <th>Vehículo</th>
+                            <th>Hora Entrada</th>
+                            <th>Hora Salida</th>
+                            <th>Total</th>
+                            <th>Estado</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody id="listaMovimientos">
+                        <!-- Cargado por JS -->
+                    </tbody>
+                </table>
+            </div>
 
-<script>
-    const PRECIO_HORA = 50; // RD$ por hora
+            <script>
+                const PRECIO_HORA = 50; // RD$ por hora
 
-    // Cargar historial
-    async function cargarMovimientos() {
-        const res = await fetch('/api/tickets');
-        const result = await res.json();
-        const tbody = document.getElementById('listaMovimientos');
-        tbody.innerHTML = '';
+                // Cargar historial
+                async function cargarMovimientos() {
+                    const res = await fetch('/api/tickets');
+                    const result = await res.json();
+                    const tbody = document.getElementById('listaMovimientos');
+                    tbody.innerHTML = '';
 
-        result.data.forEach(t => {
-            const entrada = new Date(t.fecha_hora_entrada);
-            const salida = t.fecha_hora_salida ? new Date(t.fecha_hora_salida) : null;
-            const esPendiente = !t.fecha_hora_salida;
+                    result.data.forEach(t => {
+                        const entrada = new Date(t.fecha_hora_entrada);
+                        const salida = t.fecha_hora_salida ? new Date(t.fecha_hora_salida) : null;
+                        const esPendiente = !t.fecha_hora_salida;
 
-            tbody.innerHTML += `
+                        tbody.innerHTML += `
                 <tr>
                     <td>#${t.id}</td>
                     <td>${t.vehiculo_id}</td>
@@ -91,72 +92,73 @@
                         ${esPendiente ? 'EN PARQUEO' : 'SALIDA'}</span>
                     </td>
                     <td>
-                        ${esPendiente ? 
-                            `<button class="btn-salida" onclick="registrarSalida(${t.id}, '${t.fecha_hora_entrada}', ${t.vehiculo_id})">Registrar Salida</button>` : 
-                            `<span style="color:gray">Completo</span>`}
+                        ${esPendiente ?
+                                `<button class="btn-salida" onclick="registrarSalida(${t.id}, '${t.fecha_hora_entrada}', ${t.vehiculo_id})">Registrar Salida</button>` :
+                                `<span style="color:gray">Completo</span>`}
                     </td>
                 </tr>
             `;
-        });
-    }
+                    });
+                }
 
-    // POST: Registro de Entrada
-    async function registrarEntrada() {
-        const v_id = document.getElementById('vehiculo_id').value;
-        if(!v_id) return alert("Ingrese ID de vehículo");
+                // POST: Registro de Entrada
+                async function registrarEntrada() {
+                    const v_id = document.getElementById('vehiculo_id').value;
+                    if (!v_id) return alert("Ingrese ID de vehículo");
 
-        const data = {
-            vehiculo_id: v_id,
-            fecha_hora_entrada: new Date().toISOString(), // Hora actual del sistema
-            status_de_pago: 'pendiente'
-        };
+                    const data = {
+                        vehiculo_id: v_id,
+                        fecha_hora_entrada: new Date().toISOString(), // Hora actual del sistema
+                        status_de_pago: 'pendiente'
+                    };
 
-        await fetch('/api/tickets', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(data)
-        });
-        
-        document.getElementById('vehiculo_id').value = '';
-        cargarMovimientos();
-    }
+                    await fetch('/api/tickets', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(data)
+                    });
 
-    // PUT: Registro de Salida y Cálculo de Cobro
-    async function registrarSalida(ticketId, fechaEntrada, vehiculoId) {
-        const ahora = new Date();
-        const entrada = new Date(fechaEntrada);
-        
-        // Calcular horas (mínimo 1 hora)
-        const diffMs = ahora - entrada;
-        const diffHoras = Math.max(1, Math.ceil(diffMs / (1000 * 60 * 60)));
-        const total = diffHoras * PRECIO_HORA;
+                    document.getElementById('vehiculo_id').value = '';
+                    cargarMovimientos();
+                }
 
-        if(confirm(`Resumen de Salida:\nHoras: ${diffHoras}\nTotal a pagar: RD$ ${total}\n\n¿Confirmar salida?`)) {
-            const data = {
-                vehiculo_id: vehiculoId,
-                fecha_hora_entrada: fechaEntrada,
-                fecha_hora_salida: ahora.toISOString(),
-                total_pagar: total,
-                status_de_pago: 'pagado'
-            };
+                // PUT: Registro de Salida y Cálculo de Cobro
+                async function registrarSalida(ticketId, fechaEntrada, vehiculoId) {
+                    const ahora = new Date();
+                    const entrada = new Date(fechaEntrada);
 
-            await fetch(`/api/tickets/${ticketId}`, {
-                method: 'PUT',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(data)
-            });
+                    // Calcular horas (mínimo 1 hora)
+                    const diffMs = ahora - entrada;
+                    const diffHoras = Math.max(1, Math.ceil(diffMs / (1000 * 60 * 60)));
+                    const total = diffHoras * PRECIO_HORA;
 
-            cargarMovimientos();
-        }
-    }
+                    if (confirm(`Resumen de Salida:\nHoras: ${diffHoras}\nTotal a pagar: RD$ ${total}\n\n¿Confirmar salida?`)) {
+                        const data = {
+                            vehiculo_id: vehiculoId,
+                            fecha_hora_entrada: fechaEntrada,
+                            fecha_hora_salida: ahora.toISOString(),
+                            total_pagar: total,
+                            status_de_pago: 'pagado'
+                        };
 
-    // Reloj en tiempo real
-    setInterval(() => {
-        document.getElementById('reloj').innerText = new Date().toLocaleTimeString();
-    }, 1000);
+                        await fetch(`/api/tickets/${ticketId}`, {
+                            method: 'PUT',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(data)
+                        });
 
-    cargarMovimientos();
-</script>
+                        cargarMovimientos();
+                    }
+                }
+
+                // Reloj en tiempo real
+                setInterval(() => {
+                    document.getElementById('reloj').innerText = new Date().toLocaleTimeString();
+                }, 1000);
+
+                cargarMovimientos();
+            </script>
 
 </body>
+
 </html>
