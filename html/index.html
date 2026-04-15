@@ -188,16 +188,19 @@
         document.addEventListener("DOMContentLoaded", () => {
             const rol = localStorage.getItem("rol");
 
-            if (!rol) {
-                window.location.href = "login.html";
-                return;
-            }
-
             if (rol === "admin") {
                 document.getElementById("adminSection").style.display = "block";
                 document.getElementById("userName").innerText = "Admin";
-            } else {
+            } else if (rol) {
                 document.getElementById("userName").innerText = "Operador";
+            } else {
+                document.getElementById("userName").innerText = "Invitado";
+                const btnSalir = document.querySelector('button[onclick="logout()"]');
+                if (btnSalir) {
+                    btnSalir.innerText = "Iniciar Sesión";
+                    btnSalir.style.color = "#3498db";
+                    btnSalir.onclick = () => window.location.href = "/login";
+                }
             }
 
             cargarDashboard();

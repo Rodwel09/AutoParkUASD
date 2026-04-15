@@ -75,9 +75,9 @@ app.get('/usuarios', (req, res) => {
   res.sendFile(path.join(__dirname, 'html', 'usuarios.html'))
 })
 
-// Home endpoint redirects to the login page
+// Home endpoint redirects to the dashboard explicitly allows non-logged users
 app.get('/', (req, res) => {
-  res.redirect('/login')
+  res.redirect('/dashboard')
 })
 
 // Register routes
