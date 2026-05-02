@@ -22,7 +22,7 @@
                 <a href="/dashboard"><i class="fas fa-home"></i> Inicio</a>
                 <a class="active" href="/entrada"><i class="fas fa-car" onclick="admin()"></i> Registrar Entrada</a>
                 <a href="/salida"><i class="fas fa-sign-out-alt"></i> Registrar Salida</a>
-                <a href="/reportes"><i class="fas fa-chart-bar"></i> Reportes</a>
+                <a href="/reportes" class="nav-auth-only"><i class="fas fa-chart-bar"></i> Reportes</a>
             </nav>
         </aside>
 
@@ -69,6 +69,12 @@
 
             <script>
                 let ticketsCargados = []; // Variable global para guardar los datos
+
+                if (!localStorage.getItem("rol")) {
+                    document.querySelectorAll(".nav-auth-only").forEach((el) => {
+                        el.style.display = "none";
+                    });
+                }
 
                 // 1. Obtener todos los tickets al iniciar
                 async function cargarTickets() {

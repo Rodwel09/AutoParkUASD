@@ -24,10 +24,10 @@
                 <a href="/entrada"><i class="fas fa-sign-in-alt"></i> Registrar Entrada</a>
                 <a href="/salida"><i class="fas fa-sign-out-alt"></i> Registrar Salida</a>
                 <a class="active" href="/reservacion"><i class="fas fa-calendar-check"></i> Gestión de Reservación</a>
-                <a href="/vehiculo"><i class="fas fa-car-side"></i> Reporte Vehicular</a>
-                <a href="/tickets"><i class="fas fa-ticket-alt"></i> Historial Tickets</a>
-                <a href="/admin"><i class="fas fa-users"></i> Gestión Usuarios</a>
-                <a href="/reportes"><i class="fas fa-chart-bar"></i> Reportes</a>
+                <a href="/vehiculo" class="nav-auth-only"><i class="fas fa-car-side"></i> Reporte Vehicular</a>
+                <a href="/tickets" class="nav-auth-only"><i class="fas fa-ticket-alt"></i> Historial Tickets</a>
+                <a href="/admin" class="nav-auth-only"><i class="fas fa-users"></i> Gestión Usuarios</a>
+                <a href="/reportes" class="nav-auth-only"><i class="fas fa-chart-bar"></i> Reportes</a>
             </nav>
         </aside>
 
@@ -129,6 +129,11 @@
     <!-- Scripts simulados para el template -->
     <script>
         document.addEventListener("DOMContentLoaded", () => {
+            if (!localStorage.getItem("rol")) {
+                document.querySelectorAll(".nav-auth-only").forEach((el) => {
+                    el.style.display = "none";
+                });
+            }
             // Inicializar la fecha mínima a hoy/ahora
             const now = new Date();
             now.setMinutes(now.getMinutes() - now.getTimezoneOffset());

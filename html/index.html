@@ -93,10 +93,10 @@
                 <a href="/entrada"><i class="fa fa-sign-in-alt"></i> Registrar Entrada</a>
                 <a href="/salida"><i class="fa fa-sign-out-alt"></i> Registrar Salida</a>
                 <a href="/reservacion"><i class="fa fa-sign-out-alt"></i> Gestion de Reservacion </a>
-                <a href="/vehiculo"><i class="fa fa-file-alt"></i> Reporte Vehicular</a>
-                <a href="/tickets"><i class="fas fa-sign-out-alt"></i> Historial Tickets</a>
-                <a href="/admin"><i class="fa fa-users"></i> Gestión Usuarios</a>
-                <a href="/reportes"><i class="fa fa-file-alt"></i> Reportes</a>
+                <a href="/vehiculo" class="nav-auth-only"><i class="fa fa-file-alt"></i> Reporte Vehicular</a>
+                <a href="/tickets" class="nav-auth-only"><i class="fas fa-sign-out-alt"></i> Historial Tickets</a>
+                <a href="/admin" class="nav-auth-only"><i class="fa fa-users"></i> Gestión Usuarios</a>
+                <a href="/reportes" class="nav-auth-only"><i class="fa fa-file-alt"></i> Reportes</a>
 
                 <div id="adminSection"
                     style="display: none; border-top: 1px solid rgba(255,255,255,0.1); margin-top: 10px; padding-top: 10px;">
@@ -116,12 +116,12 @@
 
             <div class="content">
                 <section class="cards">
-                    <div class="card blue">
+                    <div class="card blue" id="cardVehiculosActivos">
                         <i class="fa fa-car"></i>
                         <h3>Vehículos Activos</h3>
                         <p id="countActivos">0</p>
                     </div>
-                    <div class="card green">
+                    <div class="card green" id="cardIngresosTotales">
                         <i class="fa fa-dollar-sign"></i>
                         <h3>Ingresos Totales</h3>
                         <p id="totalIngresos">$0.00</p>
@@ -201,6 +201,11 @@
                     btnSalir.style.color = "#3498db";
                     btnSalir.onclick = () => window.location.href = "/login";
                 }
+                document.getElementById("cardVehiculosActivos").style.display = "none";
+                document.getElementById("cardIngresosTotales").style.display = "none";
+                document.querySelectorAll(".nav-auth-only").forEach((el) => {
+                    el.style.display = "none";
+                });
             }
 
             cargarDashboard();

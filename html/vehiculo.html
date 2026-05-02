@@ -23,7 +23,7 @@
                 <a class="active" href="/entrada"><i class="fas fa-car" onclick="admin()"></i> Registrar
                     Entrada</a>
                 <a href="/salida"><i class="fas fa-sign-out-alt"></i> Registrar Salida</a>
-                <a href="/reportes"><i class="fas fa-chart-bar"></i> Reportes</a>
+                <a href="/reportes" class="nav-auth-only"><i class="fas fa-chart-bar"></i> Reportes</a>
             </nav>
         </aside>
 
@@ -67,6 +67,16 @@
             </div>
 
             <script>
+                document.addEventListener("DOMContentLoaded", () => {
+                    const rol = localStorage.getItem("rol");
+                    if (!rol) {
+                        document.querySelectorAll(".nav-auth-only").forEach((el) => {
+                            el.style.display = "none";
+                        });
+                        window.location.href = "/dashboard";
+                    }
+                });
+
                 const PRECIO_HORA = 50; // RD$ por hora
 
                 // Cargar historial
